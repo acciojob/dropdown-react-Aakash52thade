@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Card from './Card';
 
 const states = [{
 	name : "Madhya Pradesh",
@@ -136,33 +137,28 @@ const states = [{
 }];
 
 function App() {
-	// State management - track selected indices
 	const [selectedStateIndex, setSelectedStateIndex] = useState(0);
 	const [selectedCityIndex, setSelectedCityIndex] = useState(0);
 	const [selectedLandmarkIndex, setSelectedLandmarkIndex] = useState(0);
 
-	// Handler for state selection
 	const handleStateChange = (e) => {
 		const newStateIndex = Number(e.target.value);
 		setSelectedStateIndex(newStateIndex);
-		setSelectedCityIndex(0); // Reset city to first option
-		setSelectedLandmarkIndex(0); // Reset landmark to first option
+		setSelectedCityIndex(0);
+		setSelectedLandmarkIndex(0);
 	};
 
-	// Handler for city selection
 	const handleCityChange = (e) => {
 		const newCityIndex = Number(e.target.value);
 		setSelectedCityIndex(newCityIndex);
-		setSelectedLandmarkIndex(0); // Reset landmark to first option
+		setSelectedLandmarkIndex(0);
 	};
 
-	// Handler for landmark selection
 	const handleLandmarkChange = (e) => {
 		const newLandmarkIndex = Number(e.target.value);
 		setSelectedLandmarkIndex(newLandmarkIndex);
 	};
 
-	// Get current selections
 	const currentState = states[selectedStateIndex];
 	const currentCity = currentState.city[selectedCityIndex];
 	const currentLandmark = currentCity.landmarks[selectedLandmarkIndex];
@@ -171,7 +167,6 @@ function App() {
 		<div className="App">
 			<h1>Dropdown Navigation</h1>
 
-			{/* State Dropdown */}
 			<div>
 				<label>Select State: </label>
 				<select 
@@ -187,7 +182,6 @@ function App() {
 				</select>
 			</div>
 
-			{/* City Dropdown */}
 			<div>
 				<label>Select City: </label>
 				<select 
@@ -203,7 +197,6 @@ function App() {
 				</select>
 			</div>
 
-			{/* Landmark Dropdown */}
 			<div>
 				<label>Select Landmark: </label>
 				<select 
@@ -219,26 +212,26 @@ function App() {
 				</select>
 			</div>
 
-			{/* Display Selected State Information */}
-			<div>
-				<h2>State Information</h2>
-				<div id="state-name"><strong>Name:</strong> {currentState.name}</div>
-				<div id="state-description"><strong>Description:</strong> {currentState.description}</div>
-			</div>
+			{/* Using Card component for State */}
+			<Card 
+				name={currentState.name}
+				description={currentState.description}
+				type="state"
+			/>
 
-			{/* Display Selected City Information */}
-			<div>
-				<h2>City Information</h2>
-				<div id="city-name"><strong>Name:</strong> {currentCity.name}</div>
-				<div id="city-description"><strong>Description:</strong> {currentCity.description}</div>
-			</div>
+			{/* Using Card component for City */}
+			<Card 
+				name={currentCity.name}
+				description={currentCity.description}
+				type="city"
+			/>
 
-			{/* Display Selected Landmark Information */}
-			<div>
-				<h2>Landmark Information</h2>
-				<div id="landmark-name"><strong>Name:</strong> {currentLandmark.name}</div>
-				<div id="landmark-description"><strong>Description:</strong> {currentLandmark.description}</div>
-			</div>
+			{/* Using Card component for Landmark */}
+			<Card 
+				name={currentLandmark.name}
+				description={currentLandmark.description}
+				type="landmark"
+			/>
 		</div>
 	);
 }
