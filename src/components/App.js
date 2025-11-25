@@ -1,13 +1,11 @@
-import React, { useState,useReducer } from "react";
-import "./../styles/App.css";
-
+import React, { useState } from 'react';
 
 const states = [{
 	name : "Madhya Pradesh",
 	description:"Madhya Pradesh, a large state in central India, retains landmarks from eras throughout Indian history.",
 	city :[{
 		name : "Indore",
-		description:"Indore is a city in west-central India. It’s known for the 7-story Rajwada Palace and the Lal Baag Palace, which date back to Indore’s 19th-century Holkar dynasty.",
+		description:"Indore is a city in west-central India. It's known for the 7-story Rajwada Palace and the Lal Baag Palace, which date back to Indore's 19th-century Holkar dynasty.",
 		landmarks :[{
 			name : "Mhow",
 			description:"Dr. Ambedkar Nagar, commonly known as Mhow, is a cantonment in the Indore district in Madhya Pradesh state of India. It is located 23 kilometres south-west of Indore city, towards Mumbai on the old Mumbai-Agra Road.",				
@@ -17,7 +15,7 @@ const states = [{
 		}]
 	},{
 		name : "Bhopal",
-		description:"DBhopal is a city in the central Indian state of Madhya Pradesh. It's one of India’s greenest city. There are two main lakes, the Upper Lake and the Lower Lake.",
+		description:"DBhopal is a city in the central Indian state of Madhya Pradesh. It's one of India's greenest city. There are two main lakes, the Upper Lake and the Lower Lake.",
 		landmarks :[{
 			name : "MANIT",
 			description:"Maulana Azad National Institute of Technology Bhopal is a public technical university located in Bhopal, Madhya Pradesh, India. It is part of a group of publicly funded institutions in India known as National Institutes of Technology. ",
@@ -72,7 +70,7 @@ const states = [{
 	description:"Assam is a state in northeastern India known for its wildlife, archeological sites and tea plantations. ",
 	city :[{
 		name : "Guwhati",
-		description:"Guwahati is a sprawling city beside the Brahmaputra River in the northeast Indian state of Assam. It’s known for holy sites like the hilltop Kamakhya Temple,",
+		description:"Guwahati is a sprawling city beside the Brahmaputra River in the northeast Indian state of Assam. It's known for holy sites like the hilltop Kamakhya Temple,",
 		landmarks :[{
 			name : "Ganesh Guri",
 			description:"Famous because of PVR city center.",
@@ -116,7 +114,7 @@ const states = [{
 		}]
 	},{
 		name : "Gaya",
-		description:"Gaya is a holy city beside the Falgu River, in the northeast Indian state of Bihar. It’s known for 18th-century Vishnupad Mandir, a riverside temple with an octagonal shrine. Close by, ancient Mangla Gauri Temple is set on a hilltop. ",
+		description:"Gaya is a holy city beside the Falgu River, in the northeast Indian state of Bihar. It's known for 18th-century Vishnupad Mandir, a riverside temple with an octagonal shrine. Close by, ancient Mangla Gauri Temple is set on a hilltop. ",
 		landmarks :[{
 			name : "Bakraur",
 			description:"Bakraur, sometimes called Bakrour, is a village located slightly east of Bodh Gaya in the state of Bihar, India. It lies directly across the Phalgu River from the landmark of Bodh Gaya, where Gautama Buddha is said to have attained enlightenment.",
@@ -137,16 +135,112 @@ const states = [{
 	}]
 }];
 
+function App() {
+	// State management - track selected indices
+	const [selectedStateIndex, setSelectedStateIndex] = useState(0);
+	const [selectedCityIndex, setSelectedCityIndex] = useState(0);
+	const [selectedLandmarkIndex, setSelectedLandmarkIndex] = useState(0);
 
-function App() 
-{
-	// Do not alter/remove main div
+	// Handler for state selection
+	const handleStateChange = (e) => {
+		const newStateIndex = Number(e.target.value);
+		setSelectedStateIndex(newStateIndex);
+		setSelectedCityIndex(0); // Reset city to first option
+		setSelectedLandmarkIndex(0); // Reset landmark to first option
+	};
+
+	// Handler for city selection
+	const handleCityChange = (e) => {
+		const newCityIndex = Number(e.target.value);
+		setSelectedCityIndex(newCityIndex);
+		setSelectedLandmarkIndex(0); // Reset landmark to first option
+	};
+
+	// Handler for landmark selection
+	const handleLandmarkChange = (e) => {
+		const newLandmarkIndex = Number(e.target.value);
+		setSelectedLandmarkIndex(newLandmarkIndex);
+	};
+
+	// Get current selections
+	const currentState = states[selectedStateIndex];
+	const currentCity = currentState.city[selectedCityIndex];
+	const currentLandmark = currentCity.landmarks[selectedLandmarkIndex];
+
 	return (
-	<div id="main">
-		
-	</div>
+		<div className="App">
+			<h1>Dropdown Navigation</h1>
+
+			{/* State Dropdown */}
+			<div>
+				<label>Select State: </label>
+				<select 
+					id="state" 
+					value={selectedStateIndex} 
+					onChange={handleStateChange}
+				>
+					{states.map((state, index) => (
+						<option key={index} value={index}>
+							{state.name}
+						</option>
+					))}
+				</select>
+			</div>
+
+			{/* City Dropdown */}
+			<div>
+				<label>Select City: </label>
+				<select 
+					id="city" 
+					value={selectedCityIndex} 
+					onChange={handleCityChange}
+				>
+					{currentState.city.map((city, index) => (
+						<option key={index} value={index}>
+							{city.name}
+						</option>
+					))}
+				</select>
+			</div>
+
+			{/* Landmark Dropdown */}
+			<div>
+				<label>Select Landmark: </label>
+				<select 
+					id="landmark" 
+					value={selectedLandmarkIndex} 
+					onChange={handleLandmarkChange}
+				>
+					{currentCity.landmarks.map((landmark, index) => (
+						<option key={index} value={index}>
+							{landmark.name}
+						</option>
+					))}
+				</select>
+			</div>
+
+			{/* Display Selected State Information */}
+			<div>
+				<h2>State Information</h2>
+				<div id="state-name"><strong>Name:</strong> {currentState.name}</div>
+				<div id="state-description"><strong>Description:</strong> {currentState.description}</div>
+			</div>
+
+			{/* Display Selected City Information */}
+			<div>
+				<h2>City Information</h2>
+				<div id="city-name"><strong>Name:</strong> {currentCity.name}</div>
+				<div id="city-description"><strong>Description:</strong> {currentCity.description}</div>
+			</div>
+
+			{/* Display Selected Landmark Information */}
+			<div>
+				<h2>Landmark Information</h2>
+				<div id="landmark-name"><strong>Name:</strong> {currentLandmark.name}</div>
+				<div id="landmark-description"><strong>Description:</strong> {currentLandmark.description}</div>
+			</div>
+		</div>
 	);
 }
-
 
 export default App;
