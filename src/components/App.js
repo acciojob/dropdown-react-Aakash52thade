@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Card from './Card';
 
 const states = [{
 	name : "Madhya Pradesh",
@@ -136,27 +135,34 @@ const states = [{
 	}]
 }];
 
+// Card component defined inside App.js
+const Card = ({ name, description, type }) => {
+	return (
+		<>
+			<div id={`${type}-name`}>{name}</div>
+			<div id={`${type}-description`}>{description}</div>
+		</>
+	);
+};
+
 function App() {
 	const [selectedStateIndex, setSelectedStateIndex] = useState(0);
 	const [selectedCityIndex, setSelectedCityIndex] = useState(0);
 	const [selectedLandmarkIndex, setSelectedLandmarkIndex] = useState(0);
 
 	const handleStateChange = (e) => {
-		const newStateIndex = Number(e.target.value);
-		setSelectedStateIndex(newStateIndex);
+		setSelectedStateIndex(Number(e.target.value));
 		setSelectedCityIndex(0);
 		setSelectedLandmarkIndex(0);
 	};
 
 	const handleCityChange = (e) => {
-		const newCityIndex = Number(e.target.value);
-		setSelectedCityIndex(newCityIndex);
+		setSelectedCityIndex(Number(e.target.value));
 		setSelectedLandmarkIndex(0);
 	};
 
 	const handleLandmarkChange = (e) => {
-		const newLandmarkIndex = Number(e.target.value);
-		setSelectedLandmarkIndex(newLandmarkIndex);
+		setSelectedLandmarkIndex(Number(e.target.value));
 	};
 
 	const currentState = states[selectedStateIndex];
@@ -165,73 +171,33 @@ function App() {
 
 	return (
 		<div className="App">
-			<h1>Dropdown Navigation</h1>
+			<select id="state" value={selectedStateIndex} onChange={handleStateChange}>
+				{states.map((state, index) => (
+					<option key={index} value={index}>
+						{state.name}
+					</option>
+				))}
+			</select>
 
-			<div>
-				<label>Select State: </label>
-				<select 
-					id="state" 
-					value={selectedStateIndex} 
-					onChange={handleStateChange}
-				>
-					{states.map((state, index) => (
-						<option key={index} value={index}>
-							{state.name}
-						</option>
-					))}
-				</select>
-			</div>
+			<select id="city" value={selectedCityIndex} onChange={handleCityChange}>
+				{currentState.city.map((city, index) => (
+					<option key={index} value={index}>
+						{city.name}
+					</option>
+				))}
+			</select>
 
-			<div>
-				<label>Select City: </label>
-				<select 
-					id="city" 
-					value={selectedCityIndex} 
-					onChange={handleCityChange}
-				>
-					{currentState.city.map((city, index) => (
-						<option key={index} value={index}>
-							{city.name}
-						</option>
-					))}
-				</select>
-			</div>
+			<select id="landmark" value={selectedLandmarkIndex} onChange={handleLandmarkChange}>
+				{currentCity.landmarks.map((landmark, index) => (
+					<option key={index} value={index}>
+						{landmark.name}
+					</option>
+				))}
+			</select>
 
-			<div>
-				<label>Select Landmark: </label>
-				<select 
-					id="landmark" 
-					value={selectedLandmarkIndex} 
-					onChange={handleLandmarkChange}
-				>
-					{currentCity.landmarks.map((landmark, index) => (
-						<option key={index} value={index}>
-							{landmark.name}
-						</option>
-					))}
-				</select>
-			</div>
-
-			{/* Using Card component for State */}
-			<Card 
-				name={currentState.name}
-				description={currentState.description}
-				type="state"
-			/>
-
-			{/* Using Card component for City */}
-			<Card 
-				name={currentCity.name}
-				description={currentCity.description}
-				type="city"
-			/>
-
-			{/* Using Card component for Landmark */}
-			<Card 
-				name={currentLandmark.name}
-				description={currentLandmark.description}
-				type="landmark"
-			/>
+			<Card name={currentState.name} description={currentState.description} type="state" />
+			<Card name={currentCity.name} description={currentCity.description} type="city" />
+			<Card name={currentLandmark.name} description={currentLandmark.description} type="landmark" />
 		</div>
 	);
 }
